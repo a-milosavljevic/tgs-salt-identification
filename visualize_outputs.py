@@ -42,7 +42,7 @@ evaluation_file = 'evaluation.csv'
 evaluation_path = os.path.join(output_folder, evaluation_file)
 with open(evaluation_path, 'w', newline='') as f:
     writer = csv.writer(f)
-    writer.writerow(['Index', 'Acc', 'IoU'])
+    writer.writerow(['Partition', 'Index', 'Acc', 'IoU'])
 
     # For each partition
     for partition in [1, 2, 3, 4, 5]:
@@ -74,7 +74,7 @@ with open(evaluation_path, 'w', newline='') as f:
                 test_x = test_x[:, 13:114, 13:114, :]
                 y = y[:, 13:114, 13:114, :]
 
-        gt_images = (255 * test_y).astype(np.uint8)
+        gt_images = 255 * test_y.astype(np.uint8)
         out_images = (255 * np.round(y)).astype(np.uint8)
 
         for i in range(len(y)):
@@ -88,8 +88,8 @@ with open(evaluation_path, 'w', newline='') as f:
 
             img_acc = py_acc(adjust_output(test_y[i:i + 1]), y[i:i + 1], axis=None)
             img_iou = py_iou(adjust_output(test_y[i:i+1]), y[i:i+1], axis=None)
-            writer.writerow([partition, img_iou, img_acc])
-            print('P{} -> Index: {} - IoU: {} - Acc: {}'.format(partition, i, img_iou, img_acc))
+            writer.writerow([partition, i, img_acc, img_iou])
+            print('P{} -> Index: {} - Acc: {} - IoU: {}'.format(partition, i, img_acc, img_iou))
 
         del model
         model = None

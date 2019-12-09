@@ -9,10 +9,10 @@ import keras
 
 
 model_type = 'my_res_unet'
-#model_type = 'unet'
-#model_type = 'fpn'
-#model_type = 'linknet'
-#model_type = 'pspnet'
+# model_type = 'unet'
+# model_type = 'fpn'
+# model_type = 'linknet'
+# model_type = 'pspnet'
 
 
 backbone = 'resnet34'

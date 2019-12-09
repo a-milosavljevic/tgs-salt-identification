@@ -1,6 +1,8 @@
 """
-DOWNLOAD DATA FROM THE COMPETITION PAGE https://www.kaggle.com/c/tgs-salt-identification-challenge/data
-CREATE SUBFOLDER data WITH THE FOLLOWING STRUCTURE:
+DOWNLOAD DATA FILES FROM https://www.kaggle.com/c/tgs-salt-identification-challenge/data
+PLACE THEM TO data SUBFOLDER
+UNPACK train.zip TO train FOLDER AND test.zip TO test FOLDER
+THE STRUCTURE OF data FOLDER SHOULD BE LIKE THIS:
     data/depths.csv
     data/sample_submission.csv
     data/train.csv
@@ -57,12 +59,20 @@ for file_name in train_images:
     mask_path = os.path.join(train_masks_folder, file_name)
     image = cv.imread(image_path, cv.IMREAD_GRAYSCALE)
     mask = cv.imread(mask_path, cv.IMREAD_GRAYSCALE)
-    if include_depths:
-        image = np.append(image.reshape(101, 101, 1), np.full((101, 101, 1), depth, dtype=np.float32), axis=2)
-        train_x = np.append(train_x, image.reshape(1, 101, 101, 2), axis=0)
+    if image is None or mask is None:
+        if image is None:
+            print()
+            print('Invalid image:', image_path)
+        if mask is None:
+            print()
+            print('Invalid mask:', mask_path)
     else:
-        train_x = np.append(train_x, image.reshape(1, 101, 101, 1), axis=0)
-    train_y = np.append(train_y, mask.reshape(1, 101, 101, 1) > 127, axis=0)
+        if include_depths:
+            image = np.append(image.reshape(101, 101, 1), np.full((101, 101, 1), depth, dtype=np.float32), axis=2)
+            train_x = np.append(train_x, image.reshape(1, 101, 101, 2), axis=0)
+        else:
+            train_x = np.append(train_x, image.reshape(1, 101, 101, 1), axis=0)
+        train_y = np.append(train_y, mask.reshape(1, 101, 101, 1) > 127, axis=0)
 
     cnt += 1
     if cnt % 100 == 0:
@@ -77,8 +87,16 @@ print("Fixing order of training samples")
 count_ones = train_y.astype(np.float32).reshape((train_y.shape[0], np.prod(train_y.shape[1:]))).sum(axis=1)
 count_ones_ind = np.argsort(count_ones)
 
-train_x_fixed = train_x[count_ones_ind]
-train_y_fixed = train_y[count_ones_ind]
+train_x_sorted = train_x[count_ones_ind]
+train_y_sorted = train_y[count_ones_ind]
+
+fixed_ind = []
+for start_ind in range(5):
+    for curr_ind in range(start_ind, len(count_ones_ind), 5):
+        fixed_ind.append(curr_ind)
+
+train_x_fixed = train_x_sorted[fixed_ind]
+train_y_fixed = train_y_sorted[fixed_ind]
 
 
 ########################################################################################################################
