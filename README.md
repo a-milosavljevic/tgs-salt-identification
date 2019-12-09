@@ -11,9 +11,9 @@ To be able to use the code please follow listed instructions:
    data/depths.csv  
    data/sample_submission.csv  
    data/train.csv  
-   data/test/images/\*.png  
-   data/train/images/\*.png  
-   data/train/masks/\*.png  
+   data/test/images/*.png  
+   data/train/images/*.png  
+   data/train/masks/*.png  
    ```
 
 3) Execute prepare_data.py to create:  
