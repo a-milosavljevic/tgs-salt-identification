@@ -6,7 +6,7 @@ To be able to use the code please follow listed instructions:
 1) Download the competition data from the following page:  
    https://www.kaggle.com/c/tgs-salt-identification-challenge/data  
 
-2) Copy data into "data" subfolder:  
+2) Copy data into "data" subfolder. Unpack "train.zip" to "train" folder and "test.zip" to "test" folder. The folder structure should be like this:  
    ```
    data/depths.csv  
    data/sample_submission.csv  
