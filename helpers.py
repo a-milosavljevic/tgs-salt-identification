@@ -37,7 +37,7 @@ def py_iou(y_true, y_pred, axis=0):
     intersection = np.sum(np.minimum(y_true_, y_pred_), axis=axis).astype(np.float32)
     union = np.sum(np.maximum(y_true_, y_pred_), axis=axis).astype(np.float32)
     m = (intersection + 1e-6) / (union + 1e-6)
-    return np.mean(m)
+    return np.mean(m), np.mean(intersection), np.mean(union)
 
 
 def run_length_enc(img, order='F', format=True):

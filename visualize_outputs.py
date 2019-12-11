@@ -42,7 +42,14 @@ evaluation_file = 'evaluation.csv'
 evaluation_path = os.path.join(output_folder, evaluation_file)
 with open(evaluation_path, 'w', newline='') as f:
     writer = csv.writer(f)
-    writer.writerow(['Partition', 'ImgNo', 'Acc', 'IoU'])
+    writer.writerow(['Partition', 'ImgNo', 'Acc', 'IoU', 'IntersectPix', 'UnionPix'])
+
+    acc_list = []
+    iou_list = []
+    total_intersec = 0
+    total_union = 0
+    total_pixels = 0
+    total_matched = 0
 
     # For each partition
     for partition in [1, 2, 3, 4, 5]:
@@ -87,9 +94,23 @@ with open(evaluation_path, 'w', newline='') as f:
             cv.imwrite(os.path.join(output_folder, base_name + '_out.png'), out_img)
 
             img_acc = py_acc(adjust_output(test_y[i:i + 1]), y[i:i + 1], axis=None)
-            img_iou = py_iou(adjust_output(test_y[i:i+1]), y[i:i+1], axis=None)
-            writer.writerow([partition, i + 1, img_acc, img_iou])
+            img_iou, intersec, union = py_iou(adjust_output(test_y[i:i+1]), y[i:i+1], axis=None)
+            writer.writerow([partition, i + 1, img_acc, img_iou, intersec, union])
             print('P: {} -> No: {} - Acc: {} - IoU: {}'.format(partition, i + 1, img_acc, img_iou))
+
+            acc_list.append(img_acc)
+            iou_list.append(img_iou)
+            total_intersec += intersec
+            total_union += union
+            pixels = gt_img.shape[0] * gt_img.shape[1]
+            total_matched += pixels - (union - intersec)
+            total_pixels += pixels
 
         del model
         model = None
+
+    writer.writerow(['Mean', '', sum(acc_list) / len(acc_list), sum(iou_list) / len(iou_list),
+                     total_intersec / len(iou_list), total_union / len(iou_list)])
+
+    writer.writerow(['Total', '', total_matched / total_pixels, (total_intersec + 1e-6) / (total_union + 1e-6),
+                     total_intersec, total_union])
