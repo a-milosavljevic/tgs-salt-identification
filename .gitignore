@@ -127,3 +127,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Project specific
+/.idea/
+/tmp/
+/test_x.npy
+/train_x_fixed.npy
+/train_y_fixed.npy
+/data/train.csv
+/data/sample_submission.csv
+/data/depths.csv
+/data/train/
+/data/test/
