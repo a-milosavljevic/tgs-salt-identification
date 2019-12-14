@@ -98,6 +98,29 @@ for partition in [1, 2, 3, 4, 5]:
                          n=initial_filters,
                          dropout=dropout)
 
+    # Calculate and print model statistics
+    cnt_conv_layers = 0
+    cnt_conv_filters = 0
+    cnt_tconv_layers = 0
+    cnt_tconv_filters = 0
+    for layer in model.layers:
+        if isinstance(layer, keras.layers.Conv2D):
+            cnt_conv_layers += 1
+            cnt_conv_filters += layer.filters
+        if isinstance(layer, keras.layers.Conv2DTranspose):
+            cnt_tconv_layers += 1
+            cnt_tconv_filters += layer.filters
+        if isinstance(layer, keras.models.Model):
+            for mlayer in layer.layers:
+                if isinstance(mlayer, keras.layers.Conv2D):
+                    cnt_conv_layers += 1
+                    cnt_conv_filters += mlayer.filters
+                if isinstance(layer, keras.layers.Conv2DTranspose):
+                    cnt_tconv_layers += 1
+                    cnt_tconv_filters += mlayer.filters
+    print('Number of Conv2D layers/filters:', cnt_conv_layers, '/', cnt_conv_filters)
+    print('Number of Conv2DTranspose layers/filters:', cnt_tconv_layers, '/', cnt_tconv_filters)
+
     optimizer = keras.optimizers.Adam()
     model.compile(optimizer=optimizer,
                   loss=keras.losses.binary_crossentropy,
