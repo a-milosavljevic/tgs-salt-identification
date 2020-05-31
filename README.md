@@ -1,6 +1,9 @@
 # TGS Salt Identification Challenge
 
-This project represents my contribution to the Kaggle's TGS Salt Identification Challenge (https://www.kaggle.com/c/tgs-salt-identification-challenge) held in the second part of the 2018.  
+This project represents my contribution to the Kaggle's TGS Salt Identification Challenge (https://www.kaggle.com/c/tgs-salt-identification-challenge) held in the second part of the 2018. 
+
+More details can be found in the following paper: https://doi.org/10.3390/ijgi9010024 
+
 To be able to use the code please follow listed instructions:  
 
 1) Download the competition data from the following page:  
