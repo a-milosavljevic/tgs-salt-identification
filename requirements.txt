@@ -1,6 +1,6 @@
 numpy==1.16.4
 h5py==2.9.0
-opencv-python==4.1.0.25
+opencv-python==4.2.0.32
 tensorflow-gpu==1.14.0
 Keras==2.2.5
 segmentation-models==0.2.1
